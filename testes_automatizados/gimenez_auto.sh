@@ -4,8 +4,7 @@ result_folder="result"
 build_folder="build"
 thread_number=4
 
-flags=("-s "{10,20,30,40}" --scene "{random_spheres,two_spheres})
-echo ------------- ${#flags[@]}
+flags=("-s "{10,510,1010,1510,2010}" --scene "{random_spheres,two_spheres,perlin_spheres,earth,light_sample,cornell_box,instance_test,cornell_smoke,showcase,metal_test})
 
 function bar
 {
@@ -16,6 +15,12 @@ function bar2
 {
 	echo . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
 }
+
+function bar3
+{
+	echo .........................................................................
+}
+
 
 function remove_all
 {
@@ -62,8 +67,8 @@ function execute
 				echo "$threads thread(s)"
 				echo "exec num : ${qt}.${flag_index}"
 				echo "executando com: ./$executable $flag ( flag id = $flag_index )"
-				time ("$(./$executable $flag > $result_file 2> $result_log)"  ) 2> $result_time
-				echo execução do teste concluida
+				time ("$($executable $flag > $result_file 2> $result_log)") 2> $result_time
+				echo "execução do teste concluida"
 				bar
 			done
 		done
@@ -83,33 +88,37 @@ function media
 	do
 		for (( flag_index=0 ; flag_index<${#flags[@]} ; flag_index++ ));
 		do
-			local all_test=($(ls $result_folder/thread_${threads}*_${flag_index}_time.txt))
+			local all_test=($(ls $result_folder/thread_${threads}_*_${flag_index}_time.txt))
 			local total=${#all_test[@]}
 			echo "Exibindo testes com ${threads} thread(s)"
 			echo "executados com as seguintes flags : ${flags[$flag_index]}"
 			local real="0" sys="0" user="0"
-			bar2
-			echo "resultado por teste"
+			bar3
+			echo "resultado por teste:"
+			
 			for (( test_case=0 ; test_case < total ; test_case ++));
 			do
-				result=($(cat ${all_test[$test_Case]}))
+				result=($(tail -n +3 ${all_test[$test_Case]}))
 				real=$(to_num ${result[1]} $real)
 				user=$(to_num ${result[3]} $user)
 				sys=$(to_num ${result[5]} $sys)
-				echo "REAL : ${result[1]} , USER : ${result[3]} , SYS : ${result[5]} "
+				echo "FILE: ${all_test[$test_case]}"
+				echo "      REAL : ${result[1]} , USER : ${result[3]} , SYS : ${result[5]} "
 			done
-			bar2
+			bar3
+		
+			echo "somas (segundos)" 
+			echo "soma total REAL : $real"
+			echo "soma total USER : $user"
+			echo "soma total SYS  : $sys"
+			bar3
+			echo "medias (segundos)"
+			echo "REAL : " $(dc <<< "6 k $real $total / p")
+			echo "USER : " $(dc <<< "6 k $user $total / p")
+			echo "SYS  : " $(dc <<< "6 k $sys $total  / p")
+			bar
 		done
-		echo "somas (segundos)" 
-		echo "soma total REAL : $real"
-		echo "soma total USER : $user"
-		echo "soma total SYS  : $sys"
-		bar2
-		echo "medias (segundos)"
-		echo "REAL : " $(dc <<< "6 k $real $total / p")
-		echo "USER : " $(dc <<< "6 k $user $total / p")
-		echo "SYS  : " $(dc <<< "6 k $sys $total  / p")
-		bar
+		
 	done
 }
 
