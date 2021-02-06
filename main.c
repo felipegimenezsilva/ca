@@ -14,6 +14,7 @@
 #include <string.h>
 #include <scenes/rt_scenes.h>
 #include <assert.h>
+
 #define NUM_THREADS 6
 #define TAMANHO_VETOR 60000 // IMAGE_HEIGHT * IMAGE_WIDTH
 
@@ -23,7 +24,8 @@
 
 static void show_usage(const char *program_name, int err);
 
-colour_t pixels[TAMANHO_VETOR];
+pixelColour_t pixels[TAMANHO_VETOR];
+
 
 static colour_t ray_colour(const ray_t *ray, const rt_hittable_list_t *list, rt_skybox_t *skybox, int child_rays)
 {
@@ -66,19 +68,21 @@ void *aThread(void *arg)
 	long tid = param->tid ;
 	int i, j;
 
+	colour_t pixel;
 	for (int x=tid; x < TAMANHO_VETOR; x+=NUM_THREADS) 
 	{
 		j = x / param->width;
 		i = x % param->width;
-		pixels[x] = colour(0, 0, 0);
+		pixel = colour(0, 0, 0);
 		for (int s = 0; s < param->number_of_samples; ++s)
 		{
 			double u = (double)(i + rt_random_double(0, 1)) / (param->width - 1);
 			double v = (double)(j + rt_random_double(0, 1)) / (param->height - 1);
 
 			ray_t ray = rt_camera_get_ray(param->camera, u, v);
-			vec3_add(&pixels[x], ray_colour(&ray, param->world, param->skybox, param->CHILD_RAYS));
+			vec3_add(&pixel, ray_colour(&ray, param->world, param->skybox, param->CHILD_RAYS));
 		}
+		rt_write_colour(&pixels[k], pixel, number_of_samples);
 	} 
 
 	pthread_exit(NULL);
@@ -345,7 +349,7 @@ int main(int argc, char const *argv[])
         for (int i = 0; i < IMAGE_WIDTH; ++i) 
 		{
 			int k = j * IMAGE_WIDTH + i;
-			rt_write_colour(out_file, pixels[k], number_of_samples);
+			fprintf(out_file, "%d %d %d\n", pixels[k].r, pixels[k].g, pixels[k].b);
 		}
 	}
 

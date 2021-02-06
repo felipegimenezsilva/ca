@@ -12,7 +12,7 @@
 
 #define RT_MAKE_COLOUR_COMPONENT(c) (int)(256 * rt_clamp((c), 0.0, 0.999))
 
-void rt_write_colour(FILE *stream, colour_t pixel_colour, size_t samples_per_pixel)
+void rt_write_colour(pixelColour_t *pixel_colour_final, colour_t pixel_colour, size_t samples_per_pixel)
 {
     assert(NULL != stream);
 
@@ -25,6 +25,7 @@ void rt_write_colour(FILE *stream, colour_t pixel_colour, size_t samples_per_pix
     g = sqrt(scale * g);
     b = sqrt(scale * b);
 
-    fprintf(stream, "%d %d %d\n", RT_MAKE_COLOUR_COMPONENT(r), RT_MAKE_COLOUR_COMPONENT(g),
-            RT_MAKE_COLOUR_COMPONENT(b));
+    pixel_colour_final->r = RT_MAKE_COLOUR_COMPONENT(r);
+    pixel_colour_final->g = RT_MAKE_COLOUR_COMPONENT(g);
+    pixel_colour_final->b = RT_MAKE_COLOUR_COMPONENT(b);
 }
