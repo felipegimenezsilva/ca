@@ -15,7 +15,7 @@
 #include <scenes/rt_scenes.h>
 #include <assert.h>
 
-#define NUM_THREADS 6
+
 #define TAMANHO_VETOR 60000 // IMAGE_HEIGHT * IMAGE_WIDTH
 
 #define HEIGHT 200
@@ -26,6 +26,7 @@ static void show_usage(const char *program_name, int err);
 
 pixelColour_t pixels[TAMANHO_VETOR];
 
+int NUM_THREADS = 1;
 
 static colour_t ray_colour(const ray_t *ray, const rt_hittable_list_t *list, rt_skybox_t *skybox, int child_rays)
 {
@@ -126,6 +127,10 @@ int main(int argc, char const *argv[])
         else if (0 == strcmp(argv[i], "-h"))
         {
             show_usage(argv[0], EXIT_SUCCESS);
+        }
+		else if (0 == strcmp(argv[i], "--qtthreads"))
+        {
+            NUM_THREADS = atoi(argv[i]);
         }
         else if ('-' == *argv[i])
         {
