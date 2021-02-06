@@ -17,6 +17,8 @@
 
 static void show_usage(const char *program_name, int err);
 
+colour_t pixels[6000];
+
 static colour_t ray_colour(const ray_t *ray, const rt_hittable_list_t *list, rt_skybox_t *skybox, int child_rays)
 {
     if (child_rays <= 0)
