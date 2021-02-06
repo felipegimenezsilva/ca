@@ -36,7 +36,7 @@ function build
 {
 	mkdir $build_folder
 	cd $build_folder
-	cmake ../..
+	/share/apps/cmake-3.19.3/bin/cmake ../..
 	make
 	cd ..
 }
