@@ -14,6 +14,8 @@
 #include <string.h>
 #include <scenes/rt_scenes.h>
 #include <assert.h>
+#define NUM_THREADS 6
+#define TAMANHO_VETOR 6000 // IMAGE_HEIGHT * IMAGE_WIDTH
 
 static void show_usage(const char *program_name, int err);
 
@@ -42,8 +44,33 @@ static colour_t ray_colour(const ray_t *ray, const rt_hittable_list_t *list, rt_
     return emitted;
 }
 
+void *aThread(void *arg) 
+{
+	long tid=(long)arg;
+	
+	int i, j;
+
+	for (int x=tid; x < TAMANHO_VETOR; x+=NUM_THREADS) 
+	{
+		i = x / IMAGE_HEIGHT;
+		j = x % IMAGE_HEIGHT;
+		pixels[x] = colour(0, 0, 0);
+		for (int s = 0; s < number_of_samples; ++s)
+		{
+			double u = (double)(i + rt_random_double(0, 1)) / (IMAGE_WIDTH - 1);
+			double v = (double)(j + rt_random_double(0, 1)) / (IMAGE_HEIGHT - 1);
+
+			ray_t ray = rt_camera_get_ray(camera, u, v);
+			vec3_add(&pixels[x], ray_colour(&ray, world, skybox, CHILD_RAYS));
+		}
+	} 
+
+	pthread_exit(NULL);
+}
+
 int main(int argc, char const *argv[])
 {
+    pthread_t threads[NUM_THREADS];
     const char *number_of_samples_str = NULL;
     const char *scene_id_str = NULL;
     const char *file_name = NULL;
@@ -131,6 +158,8 @@ int main(int argc, char const *argv[])
         fprintf(stderr, "\t- scene ID:          %d\n", scene_id);
         fprintf(stderr, "\t- file_name:         %s\n", file_name);
     }
+
+
 
     // Image parameters
     const double ASPECT_RATIO = 3.0 / 2.0;
@@ -258,25 +287,41 @@ int main(int argc, char const *argv[])
 
     // Render
     fprintf(out_file, "P3\n%d %d\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT);
-    for (int j = IMAGE_HEIGHT - 1; j >= 0; --j)
-    {
-        fprintf(stderr, "\rScanlines remaining: %d", j);
-        //fprintf(stderr, "\rtamanho: %d", sizeof(colour_t));
-        fflush(stderr);
-        for (int i = 0; i < IMAGE_WIDTH; ++i)
-        {
-            colour_t pixel = colour(0, 0, 0);
-            for (int s = 0; s < number_of_samples; ++s)
-            {
-                double u = (double)(i + rt_random_double(0, 1)) / (IMAGE_WIDTH - 1);
-                double v = (double)(j + rt_random_double(0, 1)) / (IMAGE_HEIGHT - 1);
-
-                ray_t ray = rt_camera_get_ray(camera, u, v);
-                vec3_add(&pixel, ray_colour(&ray, world, skybox, CHILD_RAYS));
-            }
-            rt_write_colour(out_file, pixel, number_of_samples);
+    
+	// create threads
+    for (t = 0; t < NUM_THREADS; t++) 
+	{
+        printf("thread main: creating thread %ld\n", t);
+        ret = pthread_create(&threads[t], NULL, aThread, (void *)t);
+        if (ret){
+            printf("ERROR; return code from pthread_create() is %d\n", ret);
+            exit(ret);
         }
     }
+
+	/* Wait for the other threads */
+	for(t=0; t<NUM_THREADS; t++) 
+	{
+		ret = pthread_join(threads[t], NULL);
+		if (ret) {
+			printf("ERROR; return code from pthread_join() is %d\n", ret);
+			exit(ret);
+		}
+		printf("thread main: joined with thread %ld\n", t);
+	}
+
+	int k;
+
+	for (int j = IMAGE_HEIGHT - 1; j >= 0; --j)
+    {
+        for (int i = 0; i < IMAGE_WIDTH; ++i) 
+		{
+			int k = j * IMAGE_WIDTH + i;
+			rt_write_colour(out_file, pixel[k], number_of_samples);
+		}
+	}
+
+
     fprintf(stderr, "\nDone\n");
 cleanup:
     // Cleanup
