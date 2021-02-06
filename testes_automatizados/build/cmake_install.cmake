@@ -1,4 +1,4 @@
-# Install script for directory: /home/gimenez/Documents/ca/ray_files
+# Install script for directory: /home/gimenez/Documents/ca
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -50,5 +50,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/gimenez/Documents/ca/ray_files/testes_automatizados/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/gimenez/Documents/ca/testes_automatizados/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

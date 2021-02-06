@@ -170,15 +170,15 @@ rt_colour.h
 rt_texture.h
 -
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_aa_rect.c
+/home/gimenez/Documents/ca/hittables/rt_aa_rect.c
 rt_aa_rect.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_aa_rect.h
+/home/gimenez/Documents/ca/hittables/rt_aa_rect.h
 rt_hittable_shared.h
 -
 assert.h
 -
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_aa_rect.h
+/home/gimenez/Documents/ca/hittables/rt_aa_rect.h
 rt_weekend.h
 -
 rt_material.h
@@ -186,29 +186,29 @@ rt_material.h
 rt_aabb.h
 -
 rt_hittable.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable.h
+/home/gimenez/Documents/ca/hittables/rt_hittable.h
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_box.c
+/home/gimenez/Documents/ca/hittables/rt_box.c
 rt_hittable.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable.h
+/home/gimenez/Documents/ca/hittables/rt_hittable.h
 rt_hittable_list.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable_list.h
+/home/gimenez/Documents/ca/hittables/rt_hittable_list.h
 rt_aa_rect.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_aa_rect.h
+/home/gimenez/Documents/ca/hittables/rt_aa_rect.h
 rt_hittable_shared.h
 -
 assert.h
 -
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_bvh.c
+/home/gimenez/Documents/ca/hittables/rt_bvh.c
 assert.h
 -
 rt_bvh.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_bvh.h
+/home/gimenez/Documents/ca/hittables/rt_bvh.h
 rt_hittable_shared.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable_shared.h
+/home/gimenez/Documents/ca/hittables/rt_hittable_shared.h
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_bvh.h
+/home/gimenez/Documents/ca/hittables/rt_bvh.h
 rt_weekend.h
 -
 rt_hittable_list.h
@@ -216,27 +216,27 @@ rt_hittable_list.h
 stdbool.h
 -
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_const_medium.c
+/home/gimenez/Documents/ca/hittables/rt_const_medium.c
 rt_texture.h
 -
 assert.h
 -
 rt_hittable.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable.h
+/home/gimenez/Documents/ca/hittables/rt_hittable.h
 rt_hittable_shared.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable_shared.h
+/home/gimenez/Documents/ca/hittables/rt_hittable_shared.h
 rt_material.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_material.h
+/home/gimenez/Documents/ca/hittables/rt_material.h
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable.c
+/home/gimenez/Documents/ca/hittables/rt_hittable.c
 assert.h
 -
 rt_hittable.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable.h
+/home/gimenez/Documents/ca/hittables/rt_hittable.h
 rt_hittable_shared.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable_shared.h
+/home/gimenez/Documents/ca/hittables/rt_hittable_shared.h
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable.h
+/home/gimenez/Documents/ca/hittables/rt_hittable.h
 rt_weekend.h
 -
 stdbool.h
@@ -248,31 +248,31 @@ rt_aabb.h
 rt_material.h
 -
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable_list.c
+/home/gimenez/Documents/ca/hittables/rt_hittable_list.c
 assert.h
 -
 rt_hittable_list.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable_list.h
+/home/gimenez/Documents/ca/hittables/rt_hittable_list.h
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable_list.h
+/home/gimenez/Documents/ca/hittables/rt_hittable_list.h
 ../rt_weekend.h
-/home/gimenez/Documents/ca/ray_files/rt_weekend.h
+/home/gimenez/Documents/ca/rt_weekend.h
 rt_hittable.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable.h
+/home/gimenez/Documents/ca/hittables/rt_hittable.h
 stdlib.h
 -
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable_shared.h
+/home/gimenez/Documents/ca/hittables/rt_hittable_shared.h
 stdbool.h
 -
 rt_material.h
 -
 rt_hittable.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable.h
+/home/gimenez/Documents/ca/hittables/rt_hittable.h
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_instance.c
+/home/gimenez/Documents/ca/hittables/rt_instance.c
 rt_instance.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_instance.h
+/home/gimenez/Documents/ca/hittables/rt_instance.h
 rt_hittable_shared.h
 -
 assert.h
@@ -280,7 +280,7 @@ assert.h
 string.h
 -
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_instance.h
+/home/gimenez/Documents/ca/hittables/rt_instance.h
 rt_aabb.h
 -
 rt_weekend.h
@@ -288,35 +288,35 @@ rt_weekend.h
 rt_hittable.h
 -
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_moving_sphere.c
+/home/gimenez/Documents/ca/hittables/rt_moving_sphere.c
 assert.h
 -
 rt_hittable.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable.h
+/home/gimenez/Documents/ca/hittables/rt_hittable.h
 rt_hittable_shared.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable_shared.h
+/home/gimenez/Documents/ca/hittables/rt_hittable_shared.h
 
-/home/gimenez/Documents/ca/ray_files/hittables/rt_sphere.c
+/home/gimenez/Documents/ca/hittables/rt_sphere.c
 rt_hittable.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable.h
+/home/gimenez/Documents/ca/hittables/rt_hittable.h
 rt_hittable_shared.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable_shared.h
+/home/gimenez/Documents/ca/hittables/rt_hittable_shared.h
 assert.h
 -
 stdlib.h
 -
 
-/home/gimenez/Documents/ca/ray_files/main.c
+/home/gimenez/Documents/ca/main.c
 pthread.h
 -
 stdio.h
 -
 hittables/rt_hittable_list.h
-/home/gimenez/Documents/ca/ray_files/hittables/rt_hittable_list.h
+/home/gimenez/Documents/ca/hittables/rt_hittable_list.h
 rt_camera.h
-/home/gimenez/Documents/ca/ray_files/rt_camera.h
+/home/gimenez/Documents/ca/rt_camera.h
 rt_skybox_simple.h
-/home/gimenez/Documents/ca/ray_files/rt_skybox_simple.h
+/home/gimenez/Documents/ca/rt_skybox_simple.h
 errno.h
 -
 string.h
@@ -326,15 +326,15 @@ scenes/rt_scenes.h
 assert.h
 -
 
-/home/gimenez/Documents/ca/ray_files/materials/rt_material.c
+/home/gimenez/Documents/ca/materials/rt_material.c
 assert.h
 -
 rt_material.h
-/home/gimenez/Documents/ca/ray_files/materials/rt_material.h
+/home/gimenez/Documents/ca/materials/rt_material.h
 rt_material_shared.h
-/home/gimenez/Documents/ca/ray_files/materials/rt_material_shared.h
+/home/gimenez/Documents/ca/materials/rt_material_shared.h
 
-/home/gimenez/Documents/ca/ray_files/materials/rt_material.h
+/home/gimenez/Documents/ca/materials/rt_material.h
 stdbool.h
 -
 rt_hit.h
@@ -344,21 +344,21 @@ rt_colour.h
 rt_texture.h
 -
 
-/home/gimenez/Documents/ca/ray_files/materials/rt_material_dielectric.c
+/home/gimenez/Documents/ca/materials/rt_material_dielectric.c
 assert.h
 -
 rt_material_shared.h
-/home/gimenez/Documents/ca/ray_files/materials/rt_material_shared.h
+/home/gimenez/Documents/ca/materials/rt_material_shared.h
 
-/home/gimenez/Documents/ca/ray_files/materials/rt_material_diffuse.c
+/home/gimenez/Documents/ca/materials/rt_material_diffuse.c
 assert.h
 -
 rt_material.h
-/home/gimenez/Documents/ca/ray_files/materials/rt_material.h
+/home/gimenez/Documents/ca/materials/rt_material.h
 rt_material_shared.h
-/home/gimenez/Documents/ca/ray_files/materials/rt_material_shared.h
+/home/gimenez/Documents/ca/materials/rt_material_shared.h
 
-/home/gimenez/Documents/ca/ray_files/materials/rt_material_diffuse_light.c
+/home/gimenez/Documents/ca/materials/rt_material_diffuse_light.c
 rt_material.h
 -
 rt_material_shared.h
@@ -366,105 +366,105 @@ rt_material_shared.h
 assert.h
 -
 
-/home/gimenez/Documents/ca/ray_files/materials/rt_material_isotropic.c
+/home/gimenez/Documents/ca/materials/rt_material_isotropic.c
 assert.h
 -
 rt_material.h
-/home/gimenez/Documents/ca/ray_files/materials/rt_material.h
+/home/gimenez/Documents/ca/materials/rt_material.h
 rt_material_shared.h
-/home/gimenez/Documents/ca/ray_files/materials/rt_material_shared.h
+/home/gimenez/Documents/ca/materials/rt_material_shared.h
 
-/home/gimenez/Documents/ca/ray_files/materials/rt_material_metal.c
+/home/gimenez/Documents/ca/materials/rt_material_metal.c
 assert.h
 -
 rt_material.h
-/home/gimenez/Documents/ca/ray_files/materials/rt_material.h
+/home/gimenez/Documents/ca/materials/rt_material.h
 rt_material_shared.h
-/home/gimenez/Documents/ca/ray_files/materials/rt_material_shared.h
+/home/gimenez/Documents/ca/materials/rt_material_shared.h
 
-/home/gimenez/Documents/ca/ray_files/materials/rt_material_shared.h
+/home/gimenez/Documents/ca/materials/rt_material_shared.h
 rt_material.h
-/home/gimenez/Documents/ca/ray_files/materials/rt_material.h
+/home/gimenez/Documents/ca/materials/rt_material.h
 
-/home/gimenez/Documents/ca/ray_files/rt_aabb.c
+/home/gimenez/Documents/ca/rt_aabb.c
 assert.h
 -
 rt_aabb.h
-/home/gimenez/Documents/ca/ray_files/rt_aabb.h
+/home/gimenez/Documents/ca/rt_aabb.h
 
-/home/gimenez/Documents/ca/ray_files/rt_aabb.h
+/home/gimenez/Documents/ca/rt_aabb.h
 stdbool.h
 -
 rt_weekend.h
-/home/gimenez/Documents/ca/ray_files/rt_weekend.h
+/home/gimenez/Documents/ca/rt_weekend.h
 
-/home/gimenez/Documents/ca/ray_files/rt_camera.c
+/home/gimenez/Documents/ca/rt_camera.c
 rt_camera.h
-/home/gimenez/Documents/ca/ray_files/rt_camera.h
+/home/gimenez/Documents/ca/rt_camera.h
 assert.h
 -
 stdlib.h
 -
 
-/home/gimenez/Documents/ca/ray_files/rt_camera.h
+/home/gimenez/Documents/ca/rt_camera.h
 rt_weekend.h
-/home/gimenez/Documents/ca/ray_files/rt_weekend.h
+/home/gimenez/Documents/ca/rt_weekend.h
 
-/home/gimenez/Documents/ca/ray_files/rt_colour.c
+/home/gimenez/Documents/ca/rt_colour.c
 assert.h
 -
 rt_colour.h
-/home/gimenez/Documents/ca/ray_files/rt_colour.h
+/home/gimenez/Documents/ca/rt_colour.h
 rt_weekend.h
-/home/gimenez/Documents/ca/ray_files/rt_weekend.h
+/home/gimenez/Documents/ca/rt_weekend.h
 
-/home/gimenez/Documents/ca/ray_files/rt_colour.h
+/home/gimenez/Documents/ca/rt_colour.h
 stdio.h
 -
 rt_weekend.h
-/home/gimenez/Documents/ca/ray_files/rt_weekend.h
+/home/gimenez/Documents/ca/rt_weekend.h
 
-/home/gimenez/Documents/ca/ray_files/rt_hit.c
+/home/gimenez/Documents/ca/rt_hit.c
 assert.h
 -
 rt_hit.h
-/home/gimenez/Documents/ca/ray_files/rt_hit.h
+/home/gimenez/Documents/ca/rt_hit.h
 
-/home/gimenez/Documents/ca/ray_files/rt_hit.h
+/home/gimenez/Documents/ca/rt_hit.h
 rt_weekend.h
-/home/gimenez/Documents/ca/ray_files/rt_weekend.h
+/home/gimenez/Documents/ca/rt_weekend.h
 stdbool.h
 -
 
-/home/gimenez/Documents/ca/ray_files/rt_matrix3.h
+/home/gimenez/Documents/ca/rt_matrix3.h
 rt_vec3.h
 -
 
-/home/gimenez/Documents/ca/ray_files/rt_perlin.c
+/home/gimenez/Documents/ca/rt_perlin.c
 assert.h
 -
 rt_perlin.h
-/home/gimenez/Documents/ca/ray_files/rt_perlin.h
+/home/gimenez/Documents/ca/rt_perlin.h
 rt_colour.h
-/home/gimenez/Documents/ca/ray_files/rt_colour.h
+/home/gimenez/Documents/ca/rt_colour.h
 
-/home/gimenez/Documents/ca/ray_files/rt_perlin.h
+/home/gimenez/Documents/ca/rt_perlin.h
 rt_weekend.h
-/home/gimenez/Documents/ca/ray_files/rt_weekend.h
+/home/gimenez/Documents/ca/rt_weekend.h
 
-/home/gimenez/Documents/ca/ray_files/rt_ray.h
+/home/gimenez/Documents/ca/rt_ray.h
 
-/home/gimenez/Documents/ca/ray_files/rt_skybox_simple.c
+/home/gimenez/Documents/ca/rt_skybox_simple.c
 assert.h
 -
 rt_skybox_simple.h
-/home/gimenez/Documents/ca/ray_files/rt_skybox_simple.h
+/home/gimenez/Documents/ca/rt_skybox_simple.h
 
-/home/gimenez/Documents/ca/ray_files/rt_skybox_simple.h
+/home/gimenez/Documents/ca/rt_skybox_simple.h
 rt_colour.h
-/home/gimenez/Documents/ca/ray_files/rt_colour.h
+/home/gimenez/Documents/ca/rt_colour.h
 
-/home/gimenez/Documents/ca/ray_files/rt_vec3.h
+/home/gimenez/Documents/ca/rt_vec3.h
 math.h
 -
 stdio.h
@@ -472,7 +472,7 @@ stdio.h
 stdint.h
 -
 
-/home/gimenez/Documents/ca/ray_files/rt_weekend.h
+/home/gimenez/Documents/ca/rt_weekend.h
 stdlib.h
 -
 limits.h
@@ -480,15 +480,15 @@ limits.h
 math.h
 -
 rt_vec3.h
-/home/gimenez/Documents/ca/ray_files/rt_vec3.h
+/home/gimenez/Documents/ca/rt_vec3.h
 rt_ray.h
-/home/gimenez/Documents/ca/ray_files/rt_ray.h
+/home/gimenez/Documents/ca/rt_ray.h
 rt_matrix3.h
-/home/gimenez/Documents/ca/ray_files/rt_matrix3.h
+/home/gimenez/Documents/ca/rt_matrix3.h
 
-/home/gimenez/Documents/ca/ray_files/scenes/rt_scenes.c
+/home/gimenez/Documents/ca/scenes/rt_scenes.c
 rt_scenes.h
-/home/gimenez/Documents/ca/ray_files/scenes/rt_scenes.h
+/home/gimenez/Documents/ca/scenes/rt_scenes.h
 rt_weekend.h
 -
 rt_material.h
@@ -508,37 +508,37 @@ string.h
 assert.h
 -
 
-/home/gimenez/Documents/ca/ray_files/scenes/rt_scenes.h
+/home/gimenez/Documents/ca/scenes/rt_scenes.h
 rt_hittable_list.h
 -
 
-/home/gimenez/Documents/ca/ray_files/textures/rt_texture.c
+/home/gimenez/Documents/ca/textures/rt_texture.c
 rt_texture.h
-/home/gimenez/Documents/ca/ray_files/textures/rt_texture.h
+/home/gimenez/Documents/ca/textures/rt_texture.h
 rt_texture_shared.h
 -
 assert.h
 -
 
-/home/gimenez/Documents/ca/ray_files/textures/rt_texture.h
+/home/gimenez/Documents/ca/textures/rt_texture.h
 rt_weekend.h
 -
 rt_colour.h
 -
 
-/home/gimenez/Documents/ca/ray_files/textures/rt_texture_checker_pattern.c
+/home/gimenez/Documents/ca/textures/rt_texture_checker_pattern.c
 rt_texture_shared.h
 -
 assert.h
 -
 
-/home/gimenez/Documents/ca/ray_files/textures/rt_texture_image.c
+/home/gimenez/Documents/ca/textures/rt_texture_image.c
 rt_texture_shared.h
 -
 stb/stb_image.h
 -
 
-/home/gimenez/Documents/ca/ray_files/textures/rt_texture_noise.c
+/home/gimenez/Documents/ca/textures/rt_texture_noise.c
 assert.h
 -
 rt_perlin.h
@@ -546,11 +546,11 @@ rt_perlin.h
 rt_texture_shared.h
 -
 
-/home/gimenez/Documents/ca/ray_files/textures/rt_texture_solid_colour.c
+/home/gimenez/Documents/ca/textures/rt_texture_solid_colour.c
 rt_texture_shared.h
 -
 assert.h
 -
 rt_texture.h
-/home/gimenez/Documents/ca/ray_files/textures/rt_texture.h
+/home/gimenez/Documents/ca/textures/rt_texture.h
 

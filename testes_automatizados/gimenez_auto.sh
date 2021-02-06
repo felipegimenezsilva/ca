@@ -32,8 +32,26 @@ function remove_all
 	fi
 }
 
+function remove_build
+{
+	if [ -d $build_folder ] ; then
+		rm -r $build_folder
+	fi
+}
+
+function build_local
+{
+	remove_build
+	mkdir $build_folder
+	cd $build_folder
+	cmake ../..
+	make
+	cd ..
+}
+
 function build
 {
+	remove_build
 	mkdir $build_folder
 	cd $build_folder
 	/share/apps/cmake-3.19.3/bin/cmake ../..

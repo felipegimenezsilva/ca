@@ -4,7 +4,7 @@
 # compile C with /usr/bin/cc
 C_DEFINES = 
 
-C_INCLUDES = -I/home/gimenez/Documents/ca/ray_files/. -I/home/gimenez/Documents/ca/ray_files/materials -I/home/gimenez/Documents/ca/ray_files/hittables -I/home/gimenez/Documents/ca/ray_files/textures -I/home/gimenez/Documents/ca/ray_files/deps
+C_INCLUDES = -I/home/gimenez/Documents/ca/. -I/home/gimenez/Documents/ca/materials -I/home/gimenez/Documents/ca/hittables -I/home/gimenez/Documents/ca/textures -I/home/gimenez/Documents/ca/deps
 
 C_FLAGS = -pthread -std=gnu11
 
