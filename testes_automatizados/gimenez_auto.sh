@@ -2,9 +2,11 @@
 
 result_folder="result"
 build_folder="build"
-thread_number=4
+thread_number=32
 
-flags=("-s "{10,510,1010,1510,2010}" --scene "{random_spheres,two_spheres,perlin_spheres,earth,light_sample,cornell_box,instance_test,cornell_smoke,showcase,metal_test})
+step_thread=1
+
+flags=("-s "{10,500}" --scene "{random_spheres,two_spheres,perlin_spheres,earth,light_sample,cornell_box,instance_test,cornell_smoke,showcase,metal_test})
 
 function bar
 {
@@ -73,11 +75,11 @@ function execute
 	
 	for (( qt=1 ; qt <= quantity ; qt++ )) ; 
 	do
-		for (( threads=1 ; threads <=  thread_number ; threads++)) ;
+		for (( threads=1 ; threads <=  thread_number ; threads+=$step_thread)) ;
 		do
 			for (( flag_index=0 ; flag_index <  ${#flags[@]} ; flag_index++ )); 
 			do
-				local flag=${flags[$flag_index]}
+				local flag="${flags[$flag_index]} --qtthreads ${threads}"
 				result_file=$result_folder/thread_${threads}_exec_${qt}_${flag_index}_image.ppm
 				result_log=$result_folder/thread_${threads}_exec_${qt}_${flag_index}_log.txt
 				result_time=$result_folder/thread_${threads}_exec_${qt}_${flag_index}_time.txt

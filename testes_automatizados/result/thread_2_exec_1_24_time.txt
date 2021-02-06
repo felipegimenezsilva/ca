@@ -1,5 +1,0 @@
-./gimenez_auto.sh: line 70: : command not found
-
-real	3m45.507s
-user	3m45.399s
-sys	0m0.012s
