@@ -128,7 +128,7 @@ int main(int argc, char const *argv[])
         {
             show_usage(argv[0], EXIT_SUCCESS);
         }
-		else if (0 == strcmp(argv[i], "--qtthreads"))
+		    else if (0 == strcmp(argv[i], "--qtthreads"))
         {
             NUM_THREADS = atoi(argv[i]);
         }
@@ -298,6 +298,9 @@ int main(int argc, char const *argv[])
 
     rt_camera_t *camera =
         rt_camera_new(look_from, look_at, up, vertical_fov, ASPECT_RATIO, aperture, focus_distance, 0.0, 1.0);
+	
+  // create threads
+	thread_parameters param[NUM_THREADS];
 
     FILE *out_file = stdout;
     if (NULL != file_name)
@@ -314,8 +317,6 @@ int main(int argc, char const *argv[])
     fprintf(out_file, "P3\n%d %d\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT);
     
     int t;
-	// create threads
-	thread_parameters param[NUM_THREADS];
 	
     for (t = 0; t < NUM_THREADS; t++) 
 	{
