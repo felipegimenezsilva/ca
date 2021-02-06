@@ -130,7 +130,7 @@ int main(int argc, char const *argv[])
         }
 		    else if (0 == strcmp(argv[i], "--qtthreads"))
         {
-            NUM_THREADS = atoi(argv[i]);
+            NUM_THREADS = atoi(argv[++i]);
         }
         else if ('-' == *argv[i])
         {
