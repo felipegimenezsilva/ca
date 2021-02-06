@@ -82,7 +82,7 @@ void *aThread(void *arg)
 			ray_t ray = rt_camera_get_ray(param->camera, u, v);
 			vec3_add(&pixel, ray_colour(&ray, param->world, param->skybox, param->CHILD_RAYS));
 		}
-		rt_write_colour(&pixels[k], pixel, number_of_samples);
+		rt_write_colour(&pixels[x], pixel, param->number_of_samples);
 	} 
 
 	pthread_exit(NULL);

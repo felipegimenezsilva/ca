@@ -14,7 +14,7 @@
 
 void rt_write_colour(pixelColour_t *pixel_colour_final, colour_t pixel_colour, size_t samples_per_pixel)
 {
-    assert(NULL != stream);
+    //assert(NULL != stream);
 
     double r = pixel_colour.x;
     double g = pixel_colour.y;
