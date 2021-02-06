@@ -55,28 +55,29 @@ typedef struct thread_parameters
 	rt_skybox_t *skybox ;
 	rt_hittable_list_t *world ;
 	int number_of_samples ;
+	int height ;
+	int width ;
+	int CHILD_RAYS ;
 } thread_parameters;
 
 void *aThread(void *arg) 
 {
-	const int CHILD_RAYS = 50 ;
 	thread_parameters *param = (thread_parameters*) arg;
-	printf("tid %i\n",param->tid);
 	long tid = param->tid ;
 	int i, j;
 
 	for (int x=tid; x < TAMANHO_VETOR; x+=NUM_THREADS) 
 	{
-		i = x / HEIGHT;
-		j = x % HEIGHT;
+		j = x / param->width;
+		i = x % param->width;
 		pixels[x] = colour(0, 0, 0);
 		for (int s = 0; s < param->number_of_samples; ++s)
 		{
-			double u = (double)(i + rt_random_double(0, 1)) / (WIDTH - 1);
-			double v = (double)(j + rt_random_double(0, 1)) / (HEIGHT - 1);
+			double u = (double)(i + rt_random_double(0, 1)) / (param->width - 1);
+			double v = (double)(j + rt_random_double(0, 1)) / (param->height - 1);
 
 			ray_t ray = rt_camera_get_ray(param->camera, u, v);
-			vec3_add(&pixels[x], ray_colour(&ray, param->world, param->skybox, CHILD_RAYS));
+			vec3_add(&pixels[x], ray_colour(&ray, param->world, param->skybox, param->CHILD_RAYS));
 		}
 	} 
 
@@ -121,7 +122,7 @@ int main(int argc, char const *argv[])
         else if (0 == strcmp(argv[i], "-h"))
         {
             show_usage(argv[0], EXIT_SUCCESS);
-        }600
+        }
         else if ('-' == *argv[i])
         {
             fprintf(stderr, "Fatal error: Unknown argument '%s'\n", argv[i]);
@@ -314,11 +315,14 @@ int main(int argc, char const *argv[])
 		param[t].skybox = skybox ;
 		param[t].world = world ;
 		param[t].number_of_samples = number_of_samples ;
+		param[t].width = IMAGE_WIDTH ;
+		param[t].height = IMAGE_HEIGHT ;
+		param[t].CHILD_RAYS = CHILD_RAYS ;
 		
-        fprintf(stderr,"thread main: creating thread %ld\n", t);
+        //fprintf(stderr,"thread main: creating thread %ld\n", t);
         int ret = pthread_create(&threads[t], NULL, aThread, (void*)&param[t]);
         if (ret){
-            fprintf(stderr,"ERROR; return code from pthread_create() is %d\n", ret);
+            //fprintf(stderr,"ERROR; return code from pthread_create() is %d\n", ret);
             exit(ret);
         }
     }
@@ -328,10 +332,10 @@ int main(int argc, char const *argv[])
 	{
 		int ret = pthread_join(threads[t], NULL);
 		if (ret) {
-			printf("ERROR; return code from pthread_join() is %d\n", ret);
+		//	printf("ERROR; return code from pthread_join() is %d\n", ret);
 			exit(ret);
 		}
-		printf("thread main: joined with thread %ld\n", t);
+		//printf("thread main: joined with thread %ld\n", t);
 	}
 
 	int k;
