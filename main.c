@@ -15,11 +15,15 @@
 #include <scenes/rt_scenes.h>
 #include <assert.h>
 #define NUM_THREADS 6
-#define TAMANHO_VETOR 6000 // IMAGE_HEIGHT * IMAGE_WIDTH
+#define TAMANHO_VETOR 60000 // IMAGE_HEIGHT * IMAGE_WIDTH
+
+#define HEIGHT 200
+#define WIDTH 300
+
 
 static void show_usage(const char *program_name, int err);
 
-colour_t pixels[6000];
+colour_t pixels[TAMANHO_VETOR];
 
 static colour_t ray_colour(const ray_t *ray, const rt_hittable_list_t *list, rt_skybox_t *skybox, int child_rays)
 {
@@ -44,24 +48,35 @@ static colour_t ray_colour(const ray_t *ray, const rt_hittable_list_t *list, rt_
     return emitted;
 }
 
+typedef struct thread_parameters
+{
+	rt_camera_t *camera ;
+	long tid ;
+	rt_skybox_t *skybox ;
+	rt_hittable_list_t *world ;
+	int number_of_samples ;
+} thread_parameters;
+
 void *aThread(void *arg) 
 {
-	long tid=(long)arg;
-	
+	const int CHILD_RAYS = 50 ;
+	thread_parameters *param = (thread_parameters*) arg;
+	printf("tid %i\n",param->tid);
+	long tid = param->tid ;
 	int i, j;
 
 	for (int x=tid; x < TAMANHO_VETOR; x+=NUM_THREADS) 
 	{
-		i = x / IMAGE_HEIGHT;
-		j = x % IMAGE_HEIGHT;
+		i = x / HEIGHT;
+		j = x % HEIGHT;
 		pixels[x] = colour(0, 0, 0);
-		for (int s = 0; s < number_of_samples; ++s)
+		for (int s = 0; s < param->number_of_samples; ++s)
 		{
-			double u = (double)(i + rt_random_double(0, 1)) / (IMAGE_WIDTH - 1);
-			double v = (double)(j + rt_random_double(0, 1)) / (IMAGE_HEIGHT - 1);
+			double u = (double)(i + rt_random_double(0, 1)) / (WIDTH - 1);
+			double v = (double)(j + rt_random_double(0, 1)) / (HEIGHT - 1);
 
-			ray_t ray = rt_camera_get_ray(camera, u, v);
-			vec3_add(&pixels[x], ray_colour(&ray, world, skybox, CHILD_RAYS));
+			ray_t ray = rt_camera_get_ray(param->camera, u, v);
+			vec3_add(&pixels[x], ray_colour(&ray, param->world, param->skybox, CHILD_RAYS));
 		}
 	} 
 
@@ -106,7 +121,7 @@ int main(int argc, char const *argv[])
         else if (0 == strcmp(argv[i], "-h"))
         {
             show_usage(argv[0], EXIT_SUCCESS);
-        }
+        }600
         else if ('-' == *argv[i])
         {
             fprintf(stderr, "Fatal error: Unknown argument '%s'\n", argv[i]);
@@ -288,13 +303,22 @@ int main(int argc, char const *argv[])
     // Render
     fprintf(out_file, "P3\n%d %d\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT);
     
+    int t;
 	// create threads
+	thread_parameters param[NUM_THREADS];
+	
     for (t = 0; t < NUM_THREADS; t++) 
 	{
-        printf("thread main: creating thread %ld\n", t);
-        ret = pthread_create(&threads[t], NULL, aThread, (void *)t);
+		param[t].camera = camera ;
+		param[t].tid = t ;
+		param[t].skybox = skybox ;
+		param[t].world = world ;
+		param[t].number_of_samples = number_of_samples ;
+		
+        fprintf(stderr,"thread main: creating thread %ld\n", t);
+        int ret = pthread_create(&threads[t], NULL, aThread, (void*)&param[t]);
         if (ret){
-            printf("ERROR; return code from pthread_create() is %d\n", ret);
+            fprintf(stderr,"ERROR; return code from pthread_create() is %d\n", ret);
             exit(ret);
         }
     }
@@ -302,7 +326,7 @@ int main(int argc, char const *argv[])
 	/* Wait for the other threads */
 	for(t=0; t<NUM_THREADS; t++) 
 	{
-		ret = pthread_join(threads[t], NULL);
+		int ret = pthread_join(threads[t], NULL);
 		if (ret) {
 			printf("ERROR; return code from pthread_join() is %d\n", ret);
 			exit(ret);
@@ -317,7 +341,7 @@ int main(int argc, char const *argv[])
         for (int i = 0; i < IMAGE_WIDTH; ++i) 
 		{
 			int k = j * IMAGE_WIDTH + i;
-			rt_write_colour(out_file, pixel[k], number_of_samples);
+			rt_write_colour(out_file, pixels[k], number_of_samples);
 		}
 	}
 
