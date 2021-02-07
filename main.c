@@ -73,7 +73,7 @@ void *aThread(void *arg)
 	colour_t pixel;
 	for (int x=tid; x < param->work; x+=NUM_THREADS) 
 	{
-    aux = x + (rank * work);
+    aux = x + (param->rank * param->work);
 		j = aux / param->width;
 		i = aux % param->width;
 		pixel = colour(0, 0, 0);
