@@ -87,28 +87,7 @@ void *aThread(void *arg)
 		}
 		rt_write_colour(&param->vetor[x], pixel, param->number_of_samples);
 	} 
-
-  int i, j, aux;
-    colour_t pixel;
-
-    for (int x=0; x < work; ++x) 
-    {
-      aux = x + (rank * work);
-      j = aux / IMAGE_WIDTH;
-      i = aux % IMAGE_WIDTH;
-      
-      pixel = colour(0, 0, 0);
-      for (int s = 0; s < number_of_samples; ++s)
-      {
-        double u = (double)(i + rt_random_double(0, 1)) / (IMAGE_WIDTH - 1);
-        double v = (double)(j + rt_random_double(0, 1)) / (IMAGE_HEIGHT - 1);
-
-        ray_t ray = rt_camera_get_ray(camera, u, v);
-        vec3_add(&pixel, ray_colour(&ray, world, skybox, CHILD_RAYS));
-      }
-      rt_write_colour(&pixels[x], pixel, number_of_samples);
-    }
-
+  
 	pthread_exit(NULL);
 }
 
