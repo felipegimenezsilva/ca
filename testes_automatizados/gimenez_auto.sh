@@ -2,11 +2,10 @@
 
 result_folder="result"
 build_folder="build"
-thread_number=32
+threads_number=(1 2 3 4)
 
-step_thread=1
-
-flags=("-s "{10,500}" --scene "{random_spheres,two_spheres,perlin_spheres,earth,light_sample,cornell_box,instance_test,cornell_smoke,showcase,metal_test})
+# random_spheres,two_spheres,perlin_spheres,earth,light_sample,cornell_box,instance_test,cornell_smoke,showcase,metal_test
+flags=("-s "{10,30}" --scene "{random_spheres,two_spheres})
 
 function bar
 {
@@ -75,19 +74,20 @@ function execute
 	
 	for (( qt=1 ; qt <= quantity ; qt++ )) ; 
 	do
-		for (( threads=1 ; threads <=  thread_number ; threads+=$step_thread)) ;
+		for threads in "${threads_number[@]}"
 		do
 			for (( flag_index=0 ; flag_index <  ${#flags[@]} ; flag_index++ )); 
 			do
 				local flag="${flags[$flag_index]} --qtthreads ${threads}"
 				result_file=$result_folder/thread_${threads}_exec_${qt}_${flag_index}_image.ppm
-				result_log=$result_folder/thread_${threads}_exec_${qt}_${flag_index}_log.txt
+				#result_log=$result_folder/thread_${threads}_exec_${qt}_${flag_index}_log.txt
 				result_time=$result_folder/thread_${threads}_exec_${qt}_${flag_index}_time.txt
 				echo "realizando teste com:"
 				echo "$threads thread(s)"
 				echo "exec num : ${qt}.${flag_index}"
 				echo "executando com: ./$executable $flag ( flag id = $flag_index )"
-				time ("$($executable $flag > $result_file 2> $result_log)") 2> $result_time
+				echo "escrevendo arquivo: $result_file"
+				time ("$($executable $flag $result_file)") 2> $result_time
 				echo "execução do teste concluida"
 				bar
 			done
@@ -104,7 +104,7 @@ function to_num
 
 function media
 {
-	for (( threads=1 ; threads <= thread_number ; threads++ ));
+	for threads in "${threads_number[@]}"
 	do
 		for (( flag_index=0 ; flag_index<${#flags[@]} ; flag_index++ ));
 		do
@@ -118,7 +118,7 @@ function media
 			
 			for (( test_case=0 ; test_case < total ; test_case ++));
 			do
-				result=($(tail -n +3 ${all_test[$test_Case]}))
+				result=($(tail -n +4 ${all_test[$test_Case]}))
 				real=$(to_num ${result[1]} $real)
 				user=$(to_num ${result[3]} $user)
 				sys=$(to_num ${result[5]} $sys)
