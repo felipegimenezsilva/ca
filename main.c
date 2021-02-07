@@ -330,12 +330,11 @@ int main(int argc, char const *argv[])
     MPI_Init(&argc,&argv);
     MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    
-    int work = TAMANHO_VETOR_FINAL / numtasks;
-    pixelColour_t pixels[work];
 
     int TAMANHO_VETOR_FINAL = TAMANHO_VETOR % numtasks > 0 ? TAMANHO_VETOR + (numtasks - (TAMANHO_VETOR % numtasks)) : TAMANHO_VETOR;
-
+	int work = TAMANHO_VETOR_FINAL / numtasks;
+    pixelColour_t pixels[work];
+    
     if (rank == 0) {
       // Render
       fprintf(out_file, "P3\n%d %d\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT);
