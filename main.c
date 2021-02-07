@@ -63,6 +63,7 @@ typedef struct thread_parameters
 	int CHILD_RAYS ;
 } thread_parameters;
 
+/*
 void *aThread(void *arg) 
 {
 	thread_parameters *param = (thread_parameters*) arg;
@@ -88,6 +89,7 @@ void *aThread(void *arg)
 
 	pthread_exit(NULL);
 }
+*/
 
 int main(int argc, char const *argv[])
 {
@@ -312,7 +314,13 @@ int main(int argc, char const *argv[])
         if (NULL == out_file)
         {
             fprintf(stderr, "Fatal error: Unable to open file %s: %s", file_name, strerror(errno));
-            goto cleanup;
+            
+            //goto cleanup;
+          
+            rt_hittable_list_deinit(world);
+			rt_camera_delete(camera);
+			rt_skybox_delete(skybox);
+			return EXIT_SUCCESS;
         }
     }
 
@@ -322,8 +330,11 @@ int main(int argc, char const *argv[])
     MPI_Init(&argc,&argv);
     MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    
+    int work = TAMANHO_VETOR_FINAL / numtasks;
+    pixelColour_t pixels[work];
 
-    int TAMANHO_VETOR_FINAL = TAMANHO_VETOR % numtasks > 0 ? TAMANHO_VETOR + (numtask - (TAMANHO_VETOR % numtask)) : TAMANHO_VETOR;
+    int TAMANHO_VETOR_FINAL = TAMANHO_VETOR % numtasks > 0 ? TAMANHO_VETOR + (numtasks - (TAMANHO_VETOR % numtasks)) : TAMANHO_VETOR;
 
     if (rank == 0) {
       // Render
@@ -333,9 +344,7 @@ int main(int argc, char const *argv[])
     }
     pixelColour_t recvbuf[TAMANHO_VETOR_FINAL];
 
-    int work = TAMANHO_VETOR_FINAL / numtasks;
-
-    pixelColour_t pixels[work];
+    
 
     int i, j, aux;
 
@@ -343,22 +352,22 @@ int main(int argc, char const *argv[])
     for (int x=0; x < work; ++x) 
     {
       aux = x + (rank * work);
-      j = aux / param->width;
-      i = aux % param->width;
+      j = aux / IMAGE_WIDTH;
+      i = aux % IMAGE_WIDTH;
       pixel = colour(0, 0, 0);
-      for (int s = 0; s < param->number_of_samples; ++s)
+      for (int s = 0; s < number_of_samples; ++s)
       {
-        double u = (double)(i + rt_random_double(0, 1)) / (param->width - 1);
-        double v = (double)(j + rt_random_double(0, 1)) / (param->height - 1);
+        double u = (double)(i + rt_random_double(0, 1)) / (IMAGE_WIDTH - 1);
+        double v = (double)(j + rt_random_double(0, 1)) / (IMAGE_HEIGHT - 1);
 
-        ray_t ray = rt_camera_get_ray(param->camera, u, v);
-        vec3_add(&pixel, ray_colour(&ray, param->world, param->skybox, param->CHILD_RAYS));
+        ray_t ray = rt_camera_get_ray(camera, u, v);
+        vec3_add(&pixel, ray_colour(&ray, world, skybox, CHILD_RAYS));
       }
-      rt_write_colour(&pixels[x], pixel, param->number_of_samples);
+      rt_write_colour(&pixels[x], pixel, number_of_samples);
     }
     
     
-    MPI_Gather(&pixels, sendcount=work * 3, MPI_DOUBLE, &recvbuf, recvcount=TAMANHO_VETOR_FINAL * 3, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+    MPI_Gather(&pixels, work * 3, MPI_DOUBLE, &recvbuf, TAMANHO_VETOR_FINAL * 3, MPI_DOUBLE, 0, MPI_COMM_WORLD);
 
     
     // int t;
@@ -408,6 +417,7 @@ int main(int argc, char const *argv[])
 
     MPI_Finalize();
     fprintf(stderr, "\nDone\n");
+    
 cleanup:
     // Cleanup
     rt_hittable_list_deinit(world);
