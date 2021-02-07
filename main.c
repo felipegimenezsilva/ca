@@ -14,7 +14,7 @@
 #include <string.h>
 #include <scenes/rt_scenes.h>
 #include <assert.h>
-
+#include "mpi.h"
 
 #define TAMANHO_VETOR 60000 // IMAGE_HEIGHT * IMAGE_WIDTH
 
@@ -24,7 +24,7 @@
 
 static void show_usage(const char *program_name, int err);
 
-pixelColour_t pixels[TAMANHO_VETOR];
+//pixelColour_t pixels[TAMANHO_VETOR];
 
 int NUM_THREADS = 1;
 
@@ -91,11 +91,13 @@ void *aThread(void *arg)
 
 int main(int argc, char const *argv[])
 {
-    pthread_t threads[NUM_THREADS];
     const char *number_of_samples_str = NULL;
     const char *scene_id_str = NULL;
     const char *file_name = NULL;
     bool verbose = false;
+    
+
+    // pthread_t threads[NUM_THREADS];
 
     // Parse console arguments
     for (int i = 1; i < argc; ++i)
@@ -299,8 +301,9 @@ int main(int argc, char const *argv[])
     rt_camera_t *camera =
         rt_camera_new(look_from, look_at, up, vertical_fov, ASPECT_RATIO, aperture, focus_distance, 0.0, 1.0);
 	
-  // create threads
-	thread_parameters param[NUM_THREADS];
+    // create threads
+    //thread_parameters param[NUM_THREADS];
+
 
     FILE *out_file = stdout;
     if (NULL != file_name)
@@ -313,53 +316,97 @@ int main(int argc, char const *argv[])
         }
     }
 
-    // Render
-    fprintf(out_file, "P3\n%d %d\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT);
+    int numtasks, rank, dest, source, tag=0;
+
+    // MPI INIT
+    MPI_Init(&argc,&argv);
+    MPI_Comm_size(MPI_COMM_WORLD, &numtasks);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    int TAMANHO_VETOR_FINAL = TAMANHO_VETOR % numtasks > 0 ? TAMANHO_VETOR + (numtask - (TAMANHO_VETOR % numtask)) : TAMANHO_VETOR;
+
+    if (rank == 0) {
+      // Render
+      fprintf(out_file, "P3\n%d %d\n255\n", IMAGE_WIDTH, IMAGE_HEIGHT);
+
+      //recvbuf=(pixelColour_t*)malloc(TAMANHO_VETOR_FINAL*sizeof(pixelColour_t));
+    }
+    pixelColour_t recvbuf[TAMANHO_VETOR_FINAL];
+
+    int work = TAMANHO_VETOR_FINAL / numtasks;
+
+    pixelColour_t pixels[work];
+
+    int i, j, aux;
+
+    colour_t pixel;
+    for (int x=0; x < work; ++x) 
+    {
+      aux = x + (rank * work);
+      j = aux / param->width;
+      i = aux % param->width;
+      pixel = colour(0, 0, 0);
+      for (int s = 0; s < param->number_of_samples; ++s)
+      {
+        double u = (double)(i + rt_random_double(0, 1)) / (param->width - 1);
+        double v = (double)(j + rt_random_double(0, 1)) / (param->height - 1);
+
+        ray_t ray = rt_camera_get_ray(param->camera, u, v);
+        vec3_add(&pixel, ray_colour(&ray, param->world, param->skybox, param->CHILD_RAYS));
+      }
+      rt_write_colour(&pixels[x], pixel, param->number_of_samples);
+    }
     
-    int t;
-	
-    for (t = 0; t < NUM_THREADS; t++) 
-	{
-		param[t].camera = camera ;
-		param[t].tid = t ;
-		param[t].skybox = skybox ;
-		param[t].world = world ;
-		param[t].number_of_samples = number_of_samples ;
-		param[t].width = IMAGE_WIDTH ;
-		param[t].height = IMAGE_HEIGHT ;
-		param[t].CHILD_RAYS = CHILD_RAYS ;
-		
-        //fprintf(stderr,"thread main: creating thread %ld\n", t);
-        int ret = pthread_create(&threads[t], NULL, aThread, (void*)&param[t]);
-        if (ret){
-            //fprintf(stderr,"ERROR; return code from pthread_create() is %d\n", ret);
-            exit(ret);
+    
+    MPI_Gather(&pixels, sendcount=work * 3, MPI_DOUBLE, &recvbuf, recvcount=TAMANHO_VETOR_FINAL * 3, MPI_DOUBLE, 0, MPI_COMM_WORLD);
+
+    
+    // int t;
+
+    // for (t = 0; t < NUM_THREADS; t++) 
+    // {
+    // 	param[t].camera = camera ;
+    // 	param[t].tid = t ;
+    // 	param[t].skybox = skybox ;
+    // 	param[t].world = world ;
+    // 	param[t].number_of_samples = number_of_samples ;
+    // 	param[t].width = IMAGE_WIDTH ;
+    // 	param[t].height = IMAGE_HEIGHT ;
+    // 	param[t].CHILD_RAYS = CHILD_RAYS ;
+      
+    //       //fprintf(stderr,"thread main: creating thread %ld\n", t);
+    //       int ret = pthread_create(&threads[t], NULL, aThread, (void*)&param[t]);
+    //       if (ret){
+    //           //fprintf(stderr,"ERROR; return code from pthread_create() is %d\n", ret);
+    //           exit(ret);
+    //       }
+    //  }
+
+    // /* Wait for the other threads */
+    // for(t=0; t<NUM_THREADS; t++) 
+    // {
+    // 	int ret = pthread_join(threads[t], NULL);
+    // 	if (ret) {
+    // 	//	printf("ERROR; return code from pthread_join() is %d\n", ret);
+    // 		exit(ret);
+    // 	}
+    // 	//printf("thread main: joined with thread %ld\n", t);
+    // }
+
+    if (rank == 0) {
+      int k;
+
+      for (int j = IMAGE_HEIGHT - 1; j >= 0; --j)
+      {
+            for (int i = 0; i < IMAGE_WIDTH; ++i) 
+        {
+          int k = j * IMAGE_WIDTH + i;
+          fprintf(out_file, "%d %d %d\n", recvbuf[k].r, recvbuf[k].g, recvbuf[k].b);
         }
+      }
     }
 
-	/* Wait for the other threads */
-	for(t=0; t<NUM_THREADS; t++) 
-	{
-		int ret = pthread_join(threads[t], NULL);
-		if (ret) {
-		//	printf("ERROR; return code from pthread_join() is %d\n", ret);
-			exit(ret);
-		}
-		//printf("thread main: joined with thread %ld\n", t);
-	}
-
-	int k;
-
-	for (int j = IMAGE_HEIGHT - 1; j >= 0; --j)
-    {
-        for (int i = 0; i < IMAGE_WIDTH; ++i) 
-		{
-			int k = j * IMAGE_WIDTH + i;
-			fprintf(out_file, "%d %d %d\n", pixels[k].r, pixels[k].g, pixels[k].b);
-		}
-	}
-
-
+    MPI_Finalize();
     fprintf(stderr, "\nDone\n");
 cleanup:
     // Cleanup
