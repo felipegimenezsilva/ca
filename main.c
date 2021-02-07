@@ -68,7 +68,7 @@ void *aThread(void *arg)
 {
 	thread_parameters *param = (thread_parameters*) arg;
 	long tid = param->tid ;
-	int i, j;
+	int i, j, aux;
 
 	colour_t pixel;
 	for (int x=tid; x < param->work; x+=NUM_THREADS) 
