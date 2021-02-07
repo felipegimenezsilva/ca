@@ -333,7 +333,7 @@ int main(int argc, char **argv)
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
     int TAMANHO_VETOR_FINAL = TAMANHO_VETOR % numtasks > 0 ? TAMANHO_VETOR + (numtasks - (TAMANHO_VETOR % numtasks)) : TAMANHO_VETOR;
-	int work = TAMANHO_VETOR_FINAL / numtasks;
+	  int work = TAMANHO_VETOR_FINAL / numtasks;
     pixelColour_t pixels[work], *recvbuf;
     
     if (rank == 0) {
@@ -342,11 +342,10 @@ int main(int argc, char **argv)
 
       recvbuf=(pixelColour_t*)malloc(TAMANHO_VETOR_FINAL*sizeof(pixelColour_t));
     }
-    //pixelColour_t recvbuf[TAMANHO_VETOR_FINAL];
 
     int i, j, aux;
-
     colour_t pixel;
+
     for (int x=0; x < work; ++x) 
     {
       aux = x + (rank * work);
@@ -369,9 +368,7 @@ int main(int argc, char **argv)
     MPI_Type_contiguous(3,MPI_INT,&custom_t);
     MPI_Type_commit(&custom_t);    
     
-    printf("%i print antes work = %i \n",rank,TAMANHO_VETOR_FINAL);
     MPI_Gather(pixels, work , custom_t , recvbuf, work, custom_t , 0, MPI_COMM_WORLD);
-    printf("%i print depois\n",rank);
  
     if (rank == 0) {
       int k;
@@ -384,6 +381,8 @@ int main(int argc, char **argv)
           fprintf(out_file, "%d %d %d\n", recvbuf[k].r, recvbuf[k].g, recvbuf[k].b);
         }
       }
+
+      free(recvbuf);
     }
 
     MPI_Finalize();
