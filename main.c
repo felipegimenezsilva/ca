@@ -24,8 +24,6 @@
 
 static void show_usage(const char *program_name, int err);
 
-//pixelColour_t pixels[TAMANHO_VETOR];
-
 int NUM_THREADS = 1;
 
 static colour_t ray_colour(const ray_t *ray, const rt_hittable_list_t *list, rt_skybox_t *skybox, int child_rays)
@@ -61,9 +59,11 @@ typedef struct thread_parameters
 	int height ;
 	int width ;
 	int CHILD_RAYS ;
+  int rank;
+  int work;
+  pixelColour_t *vetor;
 } thread_parameters;
 
-/*
 void *aThread(void *arg) 
 {
 	thread_parameters *param = (thread_parameters*) arg;
@@ -71,10 +71,11 @@ void *aThread(void *arg)
 	int i, j;
 
 	colour_t pixel;
-	for (int x=tid; x < TAMANHO_VETOR; x+=NUM_THREADS) 
+	for (int x=tid; x < param-work; x+=NUM_THREADS) 
 	{
-		j = x / param->width;
-		i = x % param->width;
+    aux = x + (rank * work);
+		j = aux / param->width;
+		i = aux % param->width;
 		pixel = colour(0, 0, 0);
 		for (int s = 0; s < param->number_of_samples; ++s)
 		{
@@ -84,12 +85,33 @@ void *aThread(void *arg)
 			ray_t ray = rt_camera_get_ray(param->camera, u, v);
 			vec3_add(&pixel, ray_colour(&ray, param->world, param->skybox, param->CHILD_RAYS));
 		}
-		rt_write_colour(&pixels[x], pixel, param->number_of_samples);
+		rt_write_colour(&param->vetor[x], pixel, param->number_of_samples);
 	} 
+
+  int i, j, aux;
+    colour_t pixel;
+
+    for (int x=0; x < work; ++x) 
+    {
+      aux = x + (rank * work);
+      j = aux / IMAGE_WIDTH;
+      i = aux % IMAGE_WIDTH;
+      
+      pixel = colour(0, 0, 0);
+      for (int s = 0; s < number_of_samples; ++s)
+      {
+        double u = (double)(i + rt_random_double(0, 1)) / (IMAGE_WIDTH - 1);
+        double v = (double)(j + rt_random_double(0, 1)) / (IMAGE_HEIGHT - 1);
+
+        ray_t ray = rt_camera_get_ray(camera, u, v);
+        vec3_add(&pixel, ray_colour(&ray, world, skybox, CHILD_RAYS));
+      }
+      rt_write_colour(&pixels[x], pixel, number_of_samples);
+    }
 
 	pthread_exit(NULL);
 }
-*/
+
 
 //int main(int argc, char const *argv[])
 int main(int argc, char **argv)
@@ -304,8 +326,6 @@ int main(int argc, char **argv)
     rt_camera_t *camera =
         rt_camera_new(look_from, look_at, up, vertical_fov, ASPECT_RATIO, aperture, focus_distance, 0.0, 1.0);
 	
-    // create threads
-    //thread_parameters param[NUM_THREADS];
 
 
     FILE *out_file = stdout;
@@ -319,9 +339,9 @@ int main(int argc, char **argv)
             //goto cleanup;
           
             rt_hittable_list_deinit(world);
-			rt_camera_delete(camera);
-			rt_skybox_delete(skybox);
-			return EXIT_SUCCESS;
+            rt_camera_delete(camera);
+            rt_skybox_delete(skybox);
+            return EXIT_SUCCESS;
         }
     }
 
@@ -343,26 +363,44 @@ int main(int argc, char **argv)
       recvbuf=(pixelColour_t*)malloc(TAMANHO_VETOR_FINAL*sizeof(pixelColour_t));
     }
 
-    int i, j, aux;
-    colour_t pixel;
 
-    for (int x=0; x < work; ++x) 
-    {
-      aux = x + (rank * work);
-      j = aux / IMAGE_WIDTH;
-      i = aux % IMAGE_WIDTH;
-      
-      pixel = colour(0, 0, 0);
-      for (int s = 0; s < number_of_samples; ++s)
-      {
-        double u = (double)(i + rt_random_double(0, 1)) / (IMAGE_WIDTH - 1);
-        double v = (double)(j + rt_random_double(0, 1)) / (IMAGE_HEIGHT - 1);
-
-        ray_t ray = rt_camera_get_ray(camera, u, v);
-        vec3_add(&pixel, ray_colour(&ray, world, skybox, CHILD_RAYS));
+    // create threads
+    thread_parameters param[NUM_THREADS];
+	
+    int t;
+    for (t = 0; t < NUM_THREADS; t++) 
+	  {
+      param[t].camera = camera ;
+      param[t].tid = t ;
+      param[t].skybox = skybox ;
+      param[t].world = world ;
+      param[t].number_of_samples = number_of_samples ;
+      param[t].width = IMAGE_WIDTH ;
+      param[t].height = IMAGE_HEIGHT ;
+      param[t].CHILD_RAYS = CHILD_RAYS;
+      param[t].vetor = pixels;
+      param[t].rank = rank;
+      param[t].work = work;
+		
+      //fprintf(stderr,"thread main: creating thread %ld\n", t);
+      int ret = pthread_create(&threads[t], NULL, aThread, (void*)&param[t]);
+      if (ret){
+          //fprintf(stderr,"ERROR; return code from pthread_create() is %d\n", ret);
+          exit(ret);
       }
-      rt_write_colour(&pixels[x], pixel, number_of_samples);
     }
+
+    /* Wait for the other threads */
+    for(t=0; t<NUM_THREADS; t++) 
+    {
+      int ret = pthread_join(threads[t], NULL);
+      if (ret) {
+      //	printf("ERROR; return code from pthread_join() is %d\n", ret);
+        exit(ret);
+      }
+      //printf("thread main: joined with thread %ld\n", t);
+    }
+
 
     MPI_Datatype custom_t;
     MPI_Type_contiguous(3,MPI_INT,&custom_t);
