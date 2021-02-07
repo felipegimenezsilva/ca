@@ -71,7 +71,7 @@ void *aThread(void *arg)
 	int i, j;
 
 	colour_t pixel;
-	for (int x=tid; x < param-work; x+=NUM_THREADS) 
+	for (int x=tid; x < param->work; x+=NUM_THREADS) 
 	{
     aux = x + (rank * work);
 		j = aux / param->width;
@@ -87,7 +87,7 @@ void *aThread(void *arg)
 		}
 		rt_write_colour(&param->vetor[x], pixel, param->number_of_samples);
 	} 
-  
+
 	pthread_exit(NULL);
 }
 
@@ -95,13 +95,14 @@ void *aThread(void *arg)
 //int main(int argc, char const *argv[])
 int main(int argc, char **argv)
 {
+
     const char *number_of_samples_str = NULL;
     const char *scene_id_str = NULL;
     const char *file_name = NULL;
     bool verbose = false;
     
 
-    // pthread_t threads[NUM_THREADS];
+    pthread_t threads[NUM_THREADS];
 
     // Parse console arguments
     for (int i = 1; i < argc; ++i)
