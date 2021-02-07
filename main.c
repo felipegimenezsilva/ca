@@ -91,7 +91,8 @@ void *aThread(void *arg)
 }
 */
 
-int main(int argc, char const *argv[])
+//int main(int argc, char const *argv[])
+int main(int argc, char **argv)
 {
     const char *number_of_samples_str = NULL;
     const char *scene_id_str = NULL;
