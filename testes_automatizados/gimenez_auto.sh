@@ -2,10 +2,11 @@
 
 result_folder="result"
 build_folder="build"
-threads_number=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32)
+threads_number=(1)
+#(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32)
 
 # random_spheres,two_spheres,perlin_spheres,earth,light_sample,cornell_box,instance_test,cornell_smoke,showcase,metal_test
-flags=("-s 1000 --scene "{random_spheres,two_spheres,perlin_spheres,earth,light_sample,cornell_box,instance_test,cornell_smoke,showcase,metal_test})
+flags=("-s 10 --scene "{random_spheres,two_spheres})
 
 function bar
 {
@@ -21,7 +22,6 @@ function bar3
 {
 	echo .........................................................................
 }
-
 
 function remove_all
 {
@@ -87,7 +87,8 @@ function execute
 				echo "exec num : ${qt}.${flag_index}"
 				echo "executando com: ./$executable $flag ( flag id = $flag_index )"
 				echo "escrevendo arquivo: $result_file"
-				time ("$($executable $flag $result_file)") 2> $result_time
+				time ($executable $flag $result_file) 2> $result_time
+				echo "flags: $flag" >> $result_time
 				echo "execução do teste concluida"
 				bar
 			done

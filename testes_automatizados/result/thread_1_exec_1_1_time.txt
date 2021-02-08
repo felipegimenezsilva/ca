@@ -1,0 +1,7 @@
+
+Done
+
+real	0m1.994s
+user	0m1.993s
+sys	0m0.000s
+flags: -s 10 --scene two_spheres --qtthreads 1

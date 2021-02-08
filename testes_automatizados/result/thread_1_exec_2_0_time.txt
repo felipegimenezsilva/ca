@@ -1,0 +1,7 @@
+
+Done
+
+real	0m9.524s
+user	0m9.486s
+sys	0m0.032s
+flags: -s 10 --scene random_spheres --qtthreads 1
