@@ -1,11 +1,11 @@
 #!/bin/bash
 
 result_folder="result"
+mpi_result_folder="mpi_result"
 build_folder="build"
-#threads_number=(1)
+nodes_number=(1 2 3 4 5 6 7 8)
 threads_number=(1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32)
 
-# random_spheres,two_spheres,perlin_spheres,earth,light_sample,cornell_box,instance_test,cornell_smoke,showcase,metal_test
 #flags=("-s 10 --scene "{random_spheres,two_spheres})
 flags=("-s 1000 --scene "{random_spheres,two_spheres,perlin_spheres,earth,light_sample,cornell_box,instance_test,cornell_smoke,showcase,metal_test})
 
@@ -63,15 +63,15 @@ function build
 
 function create_folder
 {
-	if [ ! -d $result_folder ] ; then
-		mkdir $result_folder
+	if [ ! -d $1 ] ; then
+		mkdir $1
 	fi
 }
 
 function execute
 {
 	local executable=$1 quantity=$2 result_file="" result_log="" result_time="" 
-	create_folder
+	create_folder $result_folder
 	
 	for (( qt=1 ; qt <= quantity ; qt++ )) ; 
 	do
@@ -143,6 +143,35 @@ function media
 		
 	done
 }
+
+function execute_mpi
+{
+	local executable=$1 quantity=$2 result_file="" result_log="" result_time="" 
+	create_folder $mpi_result_folder
+	
+	for (( qt=1 ; qt <= quantity ; qt++ )) ; 
+	do
+		for node in "${nodes_number[@]}"
+		do
+			for (( flag_index=0 ; flag_index <  ${#flags[@]} ; flag_index++ )); 
+			do
+				local flag="${flags[$flag_index]} --qtthreads 1"
+				result_file=$mpi_result_folder/nodes_${node}_exec_${qt}_${flag_index}_image.ppm
+				result_time=$mpi_result_folder/nodes_${node}_exec_${qt}_${flag_index}_time.txt
+				echo "realizando teste com:"
+				echo "$node node(s)"
+				echo "exec num : ${qt}.${flag_index}"
+				echo "executando com: mpiexec ... ./$executable $flag ( flag id = $flag_index )"
+				echo "escrevendo arquivo: $result_file"
+				time (mpiexec -iface eth0 -n $node -f hostfile $executable $flags $result_file) 2> $result_time
+				echo "flags: $flag" >> $result_time
+				echo "execução do teste concluida"
+				bar
+			done
+		done
+	done
+}
+
 
 bar
 echo Esse script deverá ser executado a partir da pasta testes automatizados
