@@ -73,11 +73,13 @@ function execute
 	local executable=$1 quantity=$2 result_file="" result_log="" result_time="" 
 	create_folder $result_folder
 	
-	for (( qt=1 ; qt <= quantity ; qt++ )) ; 
+	
+		
+	for (( flag_index=0 ; flag_index <  ${#flags[@]} ; flag_index++ )); 
 	do
 		for threads in "${threads_number[@]}"
-		do
-			for (( flag_index=0 ; flag_index <  ${#flags[@]} ; flag_index++ )); 
+			do
+			for (( qt=1 ; qt <= quantity ; qt++ )) ; 
 			do
 				local flag="${flags[$flag_index]} --qtthreads ${threads}"
 				result_file=$result_folder/thread_${threads}_exec_${qt}_${flag_index}_image.ppm
@@ -149,11 +151,11 @@ function execute_mpi
 	local executable=$1 quantity=$2 result_file="" result_log="" result_time="" 
 	create_folder $mpi_result_folder
 	
-	for (( qt=1 ; qt <= quantity ; qt++ )) ; 
+	for (( flag_index=0 ; flag_index <  ${#flags[@]} ; flag_index++ )); 
 	do
 		for node in "${nodes_number[@]}"
 		do
-			for (( flag_index=0 ; flag_index <  ${#flags[@]} ; flag_index++ )); 
+			for (( qt=1 ; qt <= quantity ; qt++ )) ; 
 			do
 				local flag="${flags[$flag_index]} --qtthreads 1"
 				result_file=$mpi_result_folder/nodes_${node}_exec_${qt}_${flag_index}_image.ppm
