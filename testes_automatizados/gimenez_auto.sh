@@ -184,7 +184,5 @@ echo "... execute <executavel> <quantidade_por_thread>"
 echo ... remove_all 
 echo ... media
 bar
-echo "configuraçoes atuais: (threads: $thread_number)"
-bar
 
 $1 $2 $3
